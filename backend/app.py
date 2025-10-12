@@ -11,7 +11,7 @@ import os
 migrate = Migrate()
 
 def create_app():
-    app = Flask(__name__, static_folder="static")
+    app = Flask(__name__, static_folder="static", static_url_path="")
     CORS(app)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.db"
@@ -21,28 +21,24 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
 
-    # Ruta de salud
     @app.get("/health")
     def health():
         return {"status": "API OK"}
 
-    # Blueprints de la API
     app.register_blueprint(auth_bp)
     app.register_blueprint(games_bp)
     app.register_blueprint(orders_bp)
 
-    # 👇 Servir el frontend (build de Vite)
-    @app.route('/', defaults={'path': ''})
-    @app.route('/<path:path>')
+    # ✅ Sirve el frontend (React) desde Flask
+    @app.route("/", defaults={"path": ""})
+    @app.route("/<path:path>")
     def serve_frontend(path):
-        static_dir = os.path.join(os.getcwd(), 'backend', 'static')
-        if path != "" and os.path.exists(os.path.join(static_dir, path)):
-            return send_from_directory(static_dir, path)
+        if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+            return send_from_directory(app.static_folder, path)
         else:
-            return send_from_directory(static_dir, 'index.html')
+            return send_from_directory(app.static_folder, "index.html")
 
     return app
-
 
 app = create_app()
 
