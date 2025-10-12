@@ -1,24 +1,30 @@
+# render.yaml
 services:
   - type: web
     name: videojuegos-backend
     env: python
-    rootDir: backend
-    buildCommand: pip install -r requirements.txt
+    plan: free
+    region: oregon
+    buildCommand: pip install -r backend/requirements.txt
     startCommand: gunicorn app:app
     envVars:
+      - key: FLASK_ENV
+        value: production
       - key: DATABASE_URL
         value: sqlite:///database.db
       - key: SECRET_KEY
         value: dev-secret
-      - key: FRONTEND_URL
-        value: https://videojuegos-frontend.onrender.com  # (ajusta esto al nombre real del frontend cuando lo crees)
 
-  - type: web
+  - type: static
     name: videojuegos-frontend
-    env: node
-    rootDir: frontend
-    buildCommand: npm install && npm run build
-    startCommand: npm run preview
+    env: static
+    plan: free
+    region: oregon
+    buildCommand: |
+      cd frontend
+      npm install
+      npm run build
+    publishDirectory: frontend/dist
     envVars:
       - key: VITE_API_URL
-        value: https://videojuegos-backend.onrender.com
+        value: https://videojuegos-store.onrender.com
