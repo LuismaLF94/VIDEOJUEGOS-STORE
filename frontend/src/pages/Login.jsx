@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from "../api";
 
 export default function Login({ setUser }) {
@@ -59,16 +59,6 @@ export default function Login({ setUser }) {
           Entrar
         </button>
       </form>
-
-      {/* 👇 Enlace al registro */}
-      <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <p>
-          ¿No tienes cuenta?{" "}
-          <Link to="/register" style={{ color: "#007bff", textDecoration: "none" }}>
-            Regístrate aquí
-          </Link>
-        </p>
-      </div>
     </div>
   );
 }
