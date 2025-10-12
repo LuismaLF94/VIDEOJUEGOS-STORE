@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
-import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false); // Estado admin
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -15,7 +15,7 @@ export default function Register() {
       const res = await api.post("/auth/register", {
         username,
         password,
-        is_admin: isAdmin, // enviamos el valor de admin
+        is_admin: isAdmin,
       });
 
       alert(res.data.message || "Usuario registrado ✅");
@@ -72,6 +72,16 @@ export default function Register() {
           Registrar
         </button>
       </form>
+
+      {/* 👇 Enlace de vuelta al login */}
+      <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <p>
+          ¿Ya tienes cuenta?{" "}
+          <Link to="/login" style={{ color: "#007bff", textDecoration: "none" }}>
+            Inicia sesión aquí
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
