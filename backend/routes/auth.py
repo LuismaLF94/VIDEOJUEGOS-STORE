@@ -7,9 +7,10 @@ auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 @auth_bp.route("/register", methods=["POST"])
 def register():
     data = request.get_json()
+
     username = data.get("username")
     password = data.get("password")
-    is_admin = data.get("is_admin", False)  # nuevo campo para admin
+    is_admin = data.get("is_admin", False)  # NUEVO: permite admin
 
     if not username or not password:
         return jsonify({"error": "Username y password requeridos"}), 400
@@ -19,7 +20,7 @@ def register():
 
     user = User(username=username)
     user.set_password(password)
-    user.is_admin = bool(is_admin)  # guardar como booleano
+    user.is_admin = bool(is_admin)  # asigna admin
 
     db.session.add(user)
     db.session.commit()
@@ -49,3 +50,4 @@ def login():
         "user_id": user.id,
         "is_admin": user.is_admin
     })
+
