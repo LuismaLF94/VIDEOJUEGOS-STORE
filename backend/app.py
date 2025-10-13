@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory
+from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -6,13 +6,12 @@ from models import db
 from routes.auth import auth_bp
 from routes.games import games_bp
 from routes.orders import orders_bp
-import os
 
 migrate = Migrate()
 
 def create_app():
-    app = Flask(__name__, static_folder="static", static_url_path="")
-    CORS(app, supports_credentials=True)
+    app = Flask(__name__)
+    CORS(app, resources={r"/*": {"origins": "*"}})
 
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.db"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -25,18 +24,10 @@ def create_app():
     def health():
         return {"status": "API OK"}
 
+    # Blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(games_bp)
     app.register_blueprint(orders_bp)
-
-    # ✅ Sirve el frontend (React) desde Flask
-    @app.route("/", defaults={"path": ""})
-    @app.route("/<path:path>")
-    def serve_frontend(path):
-        if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
-            return send_from_directory(app.static_folder, path)
-        else:
-            return send_from_directory(app.static_folder, "index.html")
 
     return app
 
