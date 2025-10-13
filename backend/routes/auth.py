@@ -9,6 +9,7 @@ def register():
     data = request.get_json()
     username = data.get("username")
     password = data.get("password")
+    is_admin = data.get("is_admin", False)  # nuevo campo para admin
 
     if not username or not password:
         return jsonify({"error": "Username y password requeridos"}), 400
@@ -18,14 +19,18 @@ def register():
 
     user = User(username=username)
     user.set_password(password)
+    user.is_admin = bool(is_admin)  # guardar como booleano
 
     db.session.add(user)
     db.session.commit()
 
-    return jsonify({"message": "Usuario registrado correctamente"})
+    return jsonify({
+        "message": "Usuario registrado correctamente",
+        "is_admin": user.is_admin
+    }), 201
 
 
-# Login de usuario
+# Login
 @auth_bp.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -44,4 +49,3 @@ def login():
         "user_id": user.id,
         "is_admin": user.is_admin
     })
-
