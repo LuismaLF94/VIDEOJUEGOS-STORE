@@ -59,20 +59,6 @@ export default function Login({ setUser }) {
           Entrar
         </button>
       </form>
-      <button
-        onClick={() => navigate("/register")}
-        style={{
-          marginTop: "15px",
-          width: "100%",
-          padding: "10px",
-          backgroundColor: "#2196F3",
-          color: "white",
-          border: "none",
-          cursor: "pointer",
-        }}
-      >
-        Crear cuenta
-      </button>
     </div>
   );
 }
