@@ -59,6 +59,20 @@ export default function Login({ setUser }) {
           Entrar
         </button>
       </form>
+        <button
+        onClick={() => navigate("/register")}
+        style={{
+          marginTop: "15px",
+          width: "100%",
+          padding: "10px",
+          backgroundColor: "red",
+          color: "white",
+          border: "2px solid black",
+          cursor: "pointer",
+        }}
+      >
+        IR A REGISTRO
+      </button>
     </div>
   );
 }
